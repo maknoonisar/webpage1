@@ -1,642 +1,443 @@
-<!DOCTYPE html>
-<lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Surveillance</title>
-  </head>
-  <body>
-    
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
-      <div class="container">
-        <a href="#" class="navbar-brand">Surveillance</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Index
+{% endblock title %}
+{% block header %}
+    <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %} ">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{% static 'assets/vendors/jvectormap/jquery-jvectormap.css' %} ">
+    <link rel="stylesheet" href="{% static 'assets/vendors/flag-icon-css/css/flag-icon.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'assets/vendors/owl-carousel-2/owl.theme.default.min.css' %} ">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <style>
+      .video-container {
+        position: relative;
+      }
+      
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      textarea {
+        color: white !important; /* change text color to white */
+      }
+  
+    </style>
+{% endblock header %}
 
-        <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="#about" class="nav-link">About</a>
+{% block Content %}
+<div class="container-scroller">
+    <nav id="sidebar">
+      <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a class="sidebar-brand brand-logo" href="{% url 'index' %}"><img src="{% static 'assets/images/MCA.svg'  %}" alt="logo" style="width: 90px; height:57px" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="{% url 'index' %}"><img src="{% static 'assets/images/MCA.svg' %}" alt="logo" style="width: 90px; height:57px"/></a>
+      </div>
+      
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper" style="width: 100%;">
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar p-0 fixed-top d-flex flex-row">
+        <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo-mini" href="{% url 'index' %}"><img src="{% static 'assets/images/MCA.svg' %}" alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+          
+          {% comment %} <ul class="navbar-nav w-100">
+            <li class="nav-item w-100">
+              <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                <input type="text" class="form-control" placeholder="Search products">
+              </form>
             </li>
-            <li class="nav-item">
-                <a href="#contact" class="nav-link">Contact us</a>
-              </li>
-            <li class="nav-item">
-              <a href="#questions" class="nav-link">Questions</a>
+          </ul> {% endcomment %}
+          <ul class="navbar-nav navbar-nav-right">
+           
+            <li class="nav-item dropdown border-left">
+              <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                <i class="mdi mdi-bell"></i>
+                <span class="count bg-danger"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                <h6 class="p-3 mb-0">Notifications</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-calendar text-success"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Event today</p>
+                    <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-danger"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Settings</p>
+                    <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-link-variant text-warning"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Launch Admin</p>
+                    <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <p class="p-3 mb-0 text-center">See all notifications</p>
+              </div>
             </li>
-            <li class="nav-item">
-              <a href="#instructors" class="nav-link">Instructors</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
+                <div class="navbar-profile">
+                  <img class="img-xs rounded-circle" src="{% static 'face15.jpg' %}" alt="">
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name">Ahmed Ali</p>
+                  <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                <h6 class="p-3 mb-0">Profile</h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-success"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item" href="{% url 'logout' %}">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-logout text-danger"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject mb-1">Log out</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <p class="p-3 mb-0 text-center">Advanced settings</p>
+              </div>
             </li>
           </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel" >
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 text-center" style="padding-top:3vh;">
+                  <div class="row">
+                    <div class="col-md-3 col-3 col-sm-3" style="text-align: center;">
+                    <img src="{% static 'assets/logos/scd_lOGO.png' %}" style="height:120px;width:120px;"></div>
+                    <div class="col-md-6 col-6 col-sm-6" style="text-align: center;">
+                      <h1 style="font-size:60px;">INFORMATION MANAGEMENT SYSTEM</h1>
+                    </div>
+                    <div class="col-md-3 col-3 col-sm-3" style="text-align: center;">
+                      <img src="{% static 'assets/logos/ISI_Logo.png' %}" style="height:120px;width:120px;">
+                    </div>
+                  </div>
+      
+              
+                  <!-- Card content goes here -->
+                  <div class="row" style="padding-top:7vh;">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'live' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Domestic Electronic</h3>
+                                  
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'foreginlive' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                                
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Domestic Print</h3>
+                                 
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                                 
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'news_Scrapper' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Foreign Electronic</h3>
+                                  
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'international_Scrapper' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                                
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Foreign Print</h3>
+                                 
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                              
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'news_Scrapper' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">LOG</h3>
+                                  
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'international_Scrapper' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                                
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">LOG</h3>
+                                 
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class=" align-items-center">
+                                <a href="{% url 'library' %}" style="text-decoration: none; color: inherit;">
+                                  <h3 class="mb-0">Library</h3>
+                              
+                                </a>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+
+                  
+                  <!-- End of card content -->
+              
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
+      
 
 
-
-
-<!-- Jumbotron -->
-<div
-  class="bg-image p-5 text-center shadow-1-strong rounded mb-5 text-white"
-  style="background-image: url('pic2\ .webp');"
->
-  <h1 class="mb-3 h2">Jumbotron</h1>
-
-  <p>
-    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repellendus praesentium
-    labore accusamus sequi, voluptate debitis tenetur in deleniti possimus modi voluptatum
-    neque maiores dolorem unde? Aut dolorum quod excepturi fugit.
-  </p>
+      <!-- <div class="main-panel">
+        <div class="content-wrapper" style="padding: 0px; margin-top: -104px;">
+          
+        </div>
+      </div> -->
+      
+  </div>  
 </div>
-<!-- Jumbotron -->
 
+{% endblock Content %}
 
-  
-
-     <!-- Showcase -->
-     <section
-     class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start"
-   >
-     <div class="container">
-       <div class="d-sm-flex align-items-center justify-content-between">
-         <div>
-           <h1>Become a <span class="text-warning"> Web Developer </span></h1>
-           <p class="lead my-4">
-             We focus on teaching our students the fundamentals of the latest
-             and greatest technologies to prepare them for their first dev role
-           </p>
-           <button
-             class="btn btn-primary btn-lg"
-             data-bs-toggle="modal"
-             data-bs-target="#enroll"
-           >
-             Start The Enrollment
-           </button>
-         </div>
-         <img
-           class="img-fluid w-50 d-none d-sm-block"
-           src="img/showcase.svg"
-           alt=""
-         />
-       </div>
-     </div>
-   </section>
-
-    <!-- Newsletter -->
-    <section class="bg-primary text-light p-5">
-      <div class="container">
-        <div class="d-md-flex justify-content-between align-items-center">
-          <h3 class="mb-3 mb-md-0">Sign Up For Our Newsletter</h3>
-
-          <div class="input-group news-input">
-            <input type="text" class="form-control" placeholder="Enter Email" />
-            <button class="btn btn-dark btn-lg" type="button">Submit</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Boxes -->
-    <section class="p-5">
-      <div class="container">
-        <div class="row text-center g-4">
-          <div class="col-md">
-            <div class="card bg-dark text-light">
-              <div class="card-body text-center">
-                <div class="h1 mb-3">
-                  <i class="bi bi-laptop"></i>
-                </div>
-                <h3 class="card-title mb-3">Virtual</h3>
-                <p class="card-text">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Iure, quas quidem possimus dolorum esse eligendi?
-                </p>
-                <a href="#" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="card bg-secondary text-light">
-              <div class="card-body text-center">
-                <div class="h1 mb-3">
-                  <i class="bi bi-person-square"></i>
-                </div>
-                <h3 class="card-title mb-3">Hybrid</h3>
-                <p class="card-text">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Iure, quas quidem possimus dolorum esse eligendi?
-                </p>
-                <a href="#" class="btn btn-dark">Read More</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="card bg-dark text-light">
-              <div class="card-body text-center">
-                <div class="h1 mb-3">
-                  <i class="bi bi-people"></i>
-                </div>
-                <h3 class="card-title mb-3">In Person</h3>
-                <p class="card-text">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Iure, quas quidem possimus dolorum esse eligendi?
-                </p>
-                <a href="#" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Learn Sections -->
-    <section id="learn" class="p-5">
-      <div class="container">
-        <div class="row align-items-center justify-content-between">
-          <div class="col-md">
-            <img src="img/fundamentals.svg" class="img-fluid" alt="" />
-          </div>
-          <div class="col-md p-5">
-            <h2>Learn The Fundamentals</h2>
-            <p class="lead">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Similique deleniti possimus magnam corporis ratione facere!
-            </p>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque
-              reiciendis eius autem eveniet mollitia, at asperiores suscipit
-              quae similique laboriosam iste minus placeat odit velit quos,
-              nulla architecto amet voluptates?
-            </p>
-            <a href="#" class="btn btn-light mt-3">
-              <i class="bi bi-chevron-right"></i> Read More
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="p-5 bg-dark text-light">
-      <div class="container">
-        <div class="row align-items-center justify-content-between">
-          <div class="col-md p-5">
-            <h2></h2>
-            <p class="lead">
-                We had 20 years experience delivering niche software solutions to companies 
-                in the energy sector operating offshore. Our solutions monitor operational risk 
-                for unwanted events such as major accident hazards, harm to people, environment 
-                and equipment and down time. 
-            </p>
-            <p>
-                The solutions help our clients meeting regulatory 
-                requirements within risk management and expectations from the company 
-                and industry to conduct a safe and efficient operation.
-            </p>
-            <a href="#" class="btn btn-light mt-3">
-              <i class="bi bi-chevron-right"></i> Read More
-            </a>
-          </div>
-          <div class="col-md">
-            <img src="img/react.svg" class="img-fluid" alt="" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
-
-
-
-
-    <!-- Question Accordion -->
-    <section id="questions" class="p-5">
-      <div class="container">
-        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
-        <div class="accordion accordion-flush" id="questions">
-          <!-- Item 1 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#question-one"
-              >
-                Where exactly are you located?
-              </button>
-            </h2>
-            <div
-              id="question-one"
-              class="accordion-collapse collapse"
-              data-bs-parent="#questions"
-            >
-              <div class="accordion-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                beatae fuga animi distinctio perspiciatis adipisci velit maiores
-                totam tempora accusamus modi explicabo accusantium consequatur,
-                praesentium rem quisquam molestias at quos vero. Officiis ad
-                velit doloremque at. Dignissimos praesentium necessitatibus
-                natus corrupti cum consequatur aliquam! Minima molestias iure
-                quam distinctio velit.
-              </div>
-            </div>
-          </div>
-          <!-- Item 2 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#question-two"
-              >
-                How much does it cost to attend?
-              </button>
-            </h2>
-            <div
-              id="question-two"
-              class="accordion-collapse collapse"
-              data-bs-parent="#questions"
-            >
-              <div class="accordion-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                beatae fuga animi distinctio perspiciatis adipisci velit maiores
-                totam tempora accusamus modi explicabo accusantium consequatur,
-                praesentium rem quisquam molestias at quos vero. Officiis ad
-                velit doloremque at. Dignissimos praesentium necessitatibus
-                natus corrupti cum consequatur aliquam! Minima molestias iure
-                quam distinctio velit.
-              </div>
-            </div>
-          </div>
-          <!-- Item 3 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#question-three"
-              >
-                What do I need to Know?
-              </button>
-            </h2>
-            <div
-              id="question-three"
-              class="accordion-collapse collapse"
-              data-bs-parent="#questions"
-            >
-              <div class="accordion-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                beatae fuga animi distinctio perspiciatis adipisci velit maiores
-                totam tempora accusamus modi explicabo accusantium consequatur,
-                praesentium rem quisquam molestias at quos vero. Officiis ad
-                velit doloremque at. Dignissimos praesentium necessitatibus
-                natus corrupti cum consequatur aliquam! Minima molestias iure
-                quam distinctio velit.
-              </div>
-            </div>
-          </div>
-          <!-- Item 4 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#question-four"
-              >
-                How Do I sign up?
-              </button>
-            </h2>
-            <div
-              id="question-four"
-              class="accordion-collapse collapse"
-              data-bs-parent="#questions"
-            >
-              <div class="accordion-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                beatae fuga animi distinctio perspiciatis adipisci velit maiores
-                totam tempora accusamus modi explicabo accusantium consequatur,
-                praesentium rem quisquam molestias at quos vero. Officiis ad
-                velit doloremque at. Dignissimos praesentium necessitatibus
-                natus corrupti cum consequatur aliquam! Minima molestias iure
-                quam distinctio velit.
-              </div>
-            </div>
-          </div>
-          <!-- Item 5 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#question-five"
-              >
-                Do you help me find a job?
-              </button>
-            </h2>
-            <div
-              id="question-five"
-              class="accordion-collapse collapse"
-              data-bs-parent="#questions"
-            >
-              <div class="accordion-body">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                beatae fuga animi distinctio perspiciatis adipisci velit maiores
-                totam tempora accusamus modi explicabo accusantium consequatur,
-                praesentium rem quisquam molestias at quos vero. Officiis ad
-                velit doloremque at. Dignissimos praesentium necessitatibus
-                natus corrupti cum consequatur aliquam! Minima molestias iure
-                quam distinctio velit.
-              </div>
-            </div>
-          </div>
-        </div> 
-      </div>
-    </section>
-
-    <section id="instructors" class="p-5 bg-primary">
-      <div class="container">
-        <h2 class="text-center text-white">Our Instructors</h2>
-        <p class="lead text-center text-white mb-5">
-          Our instructors all have 5+ years working as a web developer in the
-          industry
-        </p>
-        <div class="row g-4">
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="https://randomuser.me/api/portraits/men/11.jpg"
-                  class="rounded-circle mb-3"
-                  alt=""
-                />
-                <h3 class="card-title mb-3">John Doe</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Assumenda accusamus nobis sed cupiditate iusto? Quibusdam.
-                </p>
-                <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="https://randomuser.me/api/portraits/women/11.jpg"
-                  class="rounded-circle mb-3"
-                  alt=""
-                />
-                <h3 class="card-title mb-3">Jane Doe</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Assumenda accusamus nobis sed cupiditate iusto? Quibusdam.
-                </p>
-                <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="https://randomuser.me/api/portraits/men/12.jpg"
-                  class="rounded-circle mb-3"
-                  alt=""
-                />
-                <h3 class="card-title mb-3">Steve Smith</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Assumenda accusamus nobis sed cupiditate iusto? Quibusdam.
-                </p>
-                <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="https://randomuser.me/api/portraits/women/12.jpg"
-                  class="rounded-circle mb-3"
-                  alt=""
-                />
-                <h3 class="card-title mb-3">Sara Smith</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Assumenda accusamus nobis sed cupiditate iusto? Quibusdam.
-                </p>
-                <a href="#"><i class="bi bi-twitter text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-facebook text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-linkedin text-dark mx-1"></i></a>
-                <a href="#"><i class="bi bi-instagram text-dark mx-1"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact & Map -->
-    <section class="p-5">
-      <div class="container">
-        <div class="row g-4">
-        
-          <div class="col-md">
-            <div id="map"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-<!--contact us section   https://icons.getbootstrap.com/ icons from here-->
-
-<section id="contact" class="p-5 my-5 bg-primary text-light"  width="25" height="30" 
-fill="currentColor" >
-    <div class="container-xl">
-        <div class="content"> <div class="row align-items-center justify-content-between">
-            <div class="col-md p-5">
-                
-                <ul id="contact">
-                    <li><svg xmlns="http://www.w3.org/2000/svg" width="90" height="180" fill="currentColor" class="bi bi-phone" viewBox="0 0 16 16">
-                    <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/>
-                    <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
-                  </svg>
-                  <p class="ex1">+9200000000</p></li>
-                </div>
-
-                <div class="col-md p-5">
-                
-            <ul><li> <svg xmlns="http://www.w3.org/2000/svg" width="120" height="180" fill="currentColor" class="bi bi-laptop" viewBox="0 0 16 16">
-                <path d="M13.5 3a.5.5 0 0 1 .5.5V11H2V3.5a.5.5 0 0 1 .5-.5h11zm-11-1A1.5 1.5 0 0 0 1 3.5V12h14V3.5A1.5 1.5 0 0 0 13.5 2h-11zM0 12.5h16a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5z"/>
-              </svg>
-              <p class="ex1">post@gmail.com</p></li>
-            </li> </ul>
-
-        </div>
-        <div class="col-md p-5">  
-              <ul><li> <svg xmlns="http://www.w3.org/2000/svg" width="120" height="180" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-              </svg>
-              <p class="ex1">Islamabad</p></li>
-            </li>
-        </ul>  
-                </div>
-
-                <div class="col-md p-5">  
-                    <ul><li>  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="180" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
-                  </svg>
-                  <p class="ex1">Support@gmail.com</p></li>
-            </li>
-            </ul></ul> 
-        </div></div>
-        <div class="col-md">
-          <img src="img/react.svg" class="img-fluid" alt="" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-<!--Google map  https://embedmapgenerator.com/?gclid=EAIaIQobChMIpOPK9q7I-QIV2JBoCR0qFA-QEAAYASAAEgJp6vD_BwE-->
-<div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
-  src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=islamabad&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a href="https://embedmapgenerator.com/">embed google maps in website</a></div><style>.mapouter{position:relative;text-align:right;width:100%;height:400px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:400px;}.gmap_iframe {height:400px!important;}</style></div>
-  <!--Google Maps-->
-
-
-
-
-
-
-
-
-    <!-- Footer -->
-    <footer class="p-5 bg-dark text-white text-center position-relative">
-      <div class="container">
-        <p class="lead">Copyright &copy; 2022 Surveillance</p>
-
-        <a href="#" class="position-absolute bottom-0 end-0 p-5">
-          <i class="bi bi-arrow-up-circle h1"></i>
-        </a>
-      </div>
-    </footer>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="enroll"
-      tabindex="-1"
-      aria-labelledby="enrollLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="enrollLabel">Enrollment</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p class="lead">Fill out this form and we will get back to you</p>
-            <form>
-              <div class="mb-3">
-                <label for="first-name" class="col-form-label">
-                  First Name:
-                </label>
-                <input type="text" class="form-control" id="first-name" />
-              </div>
-              <div class="mb-3">
-                <label for="last-name" class="col-form-label">Last Name:</label>
-                <input type="text" class="form-control" id="last-name" />
-              </div>
-              <div class="mb-3">
-                <label for="email" class="col-form-label">Email:</label>
-                <input type="email" class="form-control" id="email" />
-              </div>
-              <div class="mb-3">
-                <label for="phone" class="col-form-label">Phone:</label>
-                <input type="tel" class="form-control" id="phone" />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">Submit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
-
-    <script>
-      mapboxgl.accessToken =
-        'pk.eyJ1IjoiYnRyYXZlcnN5IiwiYSI6ImNrbmh0dXF1NzBtbnMyb3MzcTBpaG10eXcifQ.h5ZyYCglnMdOLAGGiL1Auw'
-      var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-71.060982, 42.35725],
-        zoom: 18,
-      })
-    </script>
-  </body>
-</html>
+{% block Javascript %}
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}  "></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %} "></script>
+    <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %} "></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap.min.js' %} "></script>
+    <script src="{% static 'assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %} "></script>
+    <script src="{% static 'assets/vendors/owl-carousel-2/owl.carousel.min.js' %} "></script>
+    <script src="{% static 'assets/js/jquery.cookie.js" type="text/javascript' %} "></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/off-canvas.js' %} "></script>
+    <script src="{% static 'assets/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'assets/js/misc.js' %} "></script>
+    <script src="{% static 'assets/js/settings.js' %} "></script>
+    <script src="{% static 'assets/js/todolist.js' %} "></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{% static 'assets/js/dashboard.js' %} "></script>
+{% endblock Javascript %}
